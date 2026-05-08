@@ -6,110 +6,161 @@
     <meta name="description" content="智能农业机器人项目展示 - 大一科创作品">
     <title>智能农业机器人 | 项目展示</title>
     <style>
+        :root {
+            --primary: #1e6b24;
+            --primary-dark: #14521b;
+            --primary-light: #2e8b2e;
+            --accent: #66bb6a;
+            --bg-gradient: linear-gradient(135deg, #f0f7f0 0%, #e8f5e9 100%);
+            --card-bg: rgba(255, 255, 255, 0.75);
+            --text: #2c3e2f;
+            --shadow: 0 15px 35px rgba(30, 107, 36, 0.12);
+            --radius: 24px;
+            --transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: "Microsoft YaHei", system-ui, sans-serif;
-            line-height: 1.6;
-            color: #333333;
-            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+            line-height: 1.75;
+            color: var(--text);
+            background: var(--bg-gradient);
             min-height: 100vh;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
         }
 
+        /* 动态背景 */
+        .grass-bg {
+            position: fixed; bottom: 0; left: 0; right: 0; height: 210px;
+            background: linear-gradient(to top, rgba(200, 230, 201, 0.4) 20%, transparent);
+            z-index: -1; pointer-events: none;
+        }
+
+        .blade {
+            position: absolute; bottom: 0; width: 4px;
+            background: linear-gradient(transparent, var(--accent), #81c784);
+            border-radius: 4px 4px 0 0;
+            opacity: 0.6;
+            animation: sway 4s infinite ease-in-out;
+            transform-origin: bottom center;
+        }
+
+        @keyframes sway {
+            0%, 100% { transform: rotate(-5deg); }
+            50% { transform: rotate(5deg); }
+        }
+
+        /* 导航栏 */
         .header {
             position: fixed; top: 0; left: 0; right: 0;
-            background: linear-gradient(90deg, #2E7D32, #388E3C);
-            color: white;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            background: rgba(30, 107, 36, 0.85);
+            backdrop-filter: blur(15px);
+            color: white; box-shadow: 0 4px 25px rgba(0,0,0,0.1);
             z-index: 1000;
         }
 
         .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-            height: 70px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 70px;
+            display: flex; align-items: center; justify-content: space-between;
         }
 
-        .nav-title { font-size: 1.4rem; font-weight: bold; }
+        .nav-title { font-size: 1.4rem; font-weight: 700; letter-spacing: 1px; }
 
-        .nav-menu { display: flex; gap: 30px; }
+        .nav-menu { display: flex; gap: 8px; align-items: center; }
 
         .nav-item {
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            position: relative;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            color: white; text-decoration: none; font-weight: 500;
+            padding: 8px 18px; border-radius: 50px; cursor: pointer;
+            transition: var(--transition); font-size: 0.95rem;
         }
 
-        .nav-item::after {
-            content: '';
-            position: absolute;
-            bottom: -6px;
-            left: 0;
-            width: 0;
-            height: 2px;
-            background: white;
-            transition: width 0.3s ease;
+        .nav-item:hover { background: rgba(255,255,255,0.15); }
+        .nav-item.active { background: #fff; color: var(--primary); font-weight: 700; }
+
+        #nav-bgm {
+            width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            background: rgba(255,255,255,0.15); cursor: pointer;
+            position: relative; border: 1px solid rgba(255,255,255,0.2);
+        }
+        #nav-bgm.paused::after {
+            content: ''; position: absolute; width: 24px; height: 2px;
+            background: #ff5252; transform: rotate(-45deg);
         }
 
-        .nav-item:hover::after,
-        .nav-item.active::after {
-            width: 100%;
-        }
+        /* 主体内容 */
+        .main { max-width: 1200px; margin: 0 auto; padding: 110px 20px 60px; }
 
-        .main { max-width: 1200px; margin: 0 auto; padding-top: 100px; padding-bottom: 60px; }
+        .title-section { text-align: center; margin-bottom: 40px; }
+        .title-section h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
+        .title-section p { color: #666; font-size: 1.1rem; }
 
-        .title-section { text-align: center; margin-bottom: 40px; padding: 0 20px; }
-        .title-section h1 { font-size: 2.8rem; color: #2E7D32; }
-
+        /* 机器人展示区 */
         .robot-section {
-            max-width: 720px; height: 460px; margin: 0 auto 50px;
-            position: relative; background: #ffffff; border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(46, 125, 50, 0.15); overflow: hidden;
+            max-width: 800px; aspect-ratio: 16/10; margin: 0 auto 40px;
+            position: relative; background: #fff; border-radius: var(--radius);
+            box-shadow: var(--shadow); overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.8);
         }
 
-        #robot-image { width: 100%; height: 100%; object-fit: cover; display: block; }
+        #robot-image { width: 100%; height: 100%; object-fit: cover; }
 
+        /* 雷达热点动画 */
         .hotspot {
             position: absolute; width: 32px; height: 32px;
-            background: rgba(46, 125, 50, 0.35); border: 3px solid #2E7D32;
-            border-radius: 50%; cursor: pointer;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 14px; animation: breathe 2s infinite ease-in-out;
+            background: var(--primary); border: 3px solid #fff;
+            border-radius: 50%; cursor: pointer; display: flex;
+            align-items: center; justify-content: center; font-size: 14px;
+            z-index: 10; box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        .hotspot::after {
+            content: ''; position: absolute; width: 100%; height: 100%;
+            border: 2px solid var(--primary); border-radius: 50%;
+            animation: ripple 2s infinite;
         }
 
-        .hotspot:hover { transform: scale(1.35); background: rgba(46, 125, 50, 0.7); }
-
-        @keyframes breathe { 0%,100% { transform: scale(1); } 50% { transform: scale(1.15); } }
-
-        .info-card {
-            max-width: 720px; margin: 0 auto;
-            background: linear-gradient(135deg, #f1f8f1, #e8f5e9);
-            border-radius: 16px; padding: 32px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        @keyframes ripple {
+            0% { transform: scale(1); opacity: 0.8; }
+            100% { transform: scale(2.2); opacity: 0; }
         }
 
-        .section { display: none; animation: fadeIn 0.5s ease forwards; }
-        .section.active { display: block; }
-
-        .content-card {
-            max-width: 720px; margin: 30px auto;
-            background: linear-gradient(135deg, #f1f8f1, #e8f5e9);
-            border-radius: 16px; padding: 32px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+        /* 玻璃卡片 */
+        .info-card, .content-card, .feature-card {
+            max-width: 800px; margin: 0 auto 30px;
+            background: var(--card-bg); border-radius: var(--radius);
+            padding: 35px; box-shadow: var(--shadow);
+            border: 1px solid rgba(255,255,255,0.4);
+            backdrop-filter: blur(12px);
         }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .section { display: none; opacity: 0; transform: translateY(20px); transition: var(--transition); }
+        .section.active { display: block; opacity: 1; transform: translateY(0); }
+
+        .param-grid, .feature-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; 
+        }
+
+        .param-item h2, .feature-item h2 { 
+            color: var(--primary); 
+            font-size: 1.25rem; 
+            margin-bottom: 10px; 
+            border-left: 4px solid var(--accent); 
+            padding-left: 12px; 
+        }
+
+        footer {
+            background: var(--primary-dark); color: rgba(255,255,255,0.8);
+            text-align: center; padding: 40px 20px; font-size: 0.9rem;
+        }
 
         @media (max-width: 768px) {
-            .robot-section { height: 320px; max-width: 92%; }
-            .title-section h1 { font-size: 2.2rem; }
+            .nav-title { font-size: 1.1rem; }
+            .nav-item { padding: 6px 12px; font-size: 0.85rem; }
+            .title-section h1 { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -118,115 +169,183 @@
         <div class="nav-container">
             <div class="nav-title">🌱 智能农业机器人</div>
             <nav class="nav-menu">
-                <a class="nav-item" data-page="home">首页</a >
-                <a class="nav-item active" data-page="feature" id="nav-feature">功能介绍</a >
-                <a class="nav-item" data-page="params">技术参数</a >
-                <a class="nav-item" data-page="about">关于项目</a >
+                <a class="nav-item active" data-page="feature" id="nav-feature">首页</a >
+                <a class="nav-item" data-page="functions" id="nav-functions">功能</a >
+                <a class="nav-item" data-page="params" id="nav-params">参数</a >
+                <a class="nav-item" data-page="about" id="nav-about">关于</a >
+                <div id="nav-bgm">♪</div>
             </nav>
         </div>
     </header>
 
+    <div class="grass-bg" id="grass-container"></div>
+
     <main class="main">
-        <!-- 机器人主页面（首页与功能介绍共用） -->
+        <!-- 首页 -->
         <div id="page-feature" class="section active">
             <div class="title-section">
                 <h1>智能农业机器人演示平台</h1>
-                <p>点击机器人不同部位，了解各模块功能与实时数据 | 大一科创项目展示</p >
+                <p>融合视觉AI与精准作业的智慧农业解决方案</p >
             </div>
 
             <div class="robot-section">
-                <!-- 修正img标签语法错误（去掉前面的空格） -->
-                <img id="robot-image" src="images/robot.jpg" alt="智能农业机器人" draggable="false">
-
-                <!-- 校准后的热点位置，和你图片里的点完全对应 -->
-                <div class="hotspot" style="left: 44%; top: 80%;" onclick="showInfo(1)">🚜</div> <!-- 移动底盘（水滴位置） -->
-                <div class="hotspot" style="left: 26%; top: 51%;" onclick="showInfo(2)">🤖</div> <!-- 机械臂（左手臂位置） -->
-                <div class="hotspot" style="left: 46%; top: 42%;" onclick="showInfo(3)">📷</div> <!-- 视觉传感器（胸口位置） -->
-                <div class="hotspot" style="left: 65%; top: 52%;" onclick="showInfo(4)">💧</div> <!-- 喷洒装置（右侧药箱位置） -->
+                < img id="robot-image" src="images/robot.jpg" alt="智能农业机器人" onerror="this.src='https://images.unsplash.com/photo-1530836361280-8814d4564708?auto=format&fit=crop&q=80&w=1000'">
+                
+                <div class="hotspot" style="left: 33%; top: 70%;" onclick="showInfo(1)">🚜</div>
+                <div class="hotspot" style="left: 22%; top: 65%;" onclick="showInfo(2)">🤖</div>
+                <div class="hotspot" style="left: 46%; top: 42%;" onclick="showInfo(3)">📷</div>
+                <div class="hotspot" style="left: 65%; top: 52%;" onclick="showInfo(4)">💧</div>
             </div>
 
             <div class="info-card" id="info">
-                <h2>👆 点击机器人部位查看详情</h2>
-                <p>本项目为大一学生科创作品，展示了农业机器人核心模块的设计理念与技术参数。</p >
+                <h2 style="color:var(--primary); margin-bottom:10px;">👆 点击热点查看模块介绍</h2>
+                <p>点击机器人上的不同部位，下方将显示对应功能模块的详细说明。</p >
             </div>
         </div>
 
-        <!-- 技术参数页面 -->
+        <!-- 功能页面 -->
+        <div id="page-functions" class="section">
+            <div class="title-section">
+                <h1>核心功能介绍</h1>
+            </div>
+            <div class="feature-card">
+                <div class="feature-grid" id="feature-grid">
+                    <!-- 由 JavaScript 动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 技术参数 -->
         <div id="page-params" class="section">
-            <div class="title-section"><h1>技术参数</h1></div>
+            <div class="title-section"><h1>技术规格说明</h1></div>
             <div class="content-card">
-                <h2>🚜 移动底盘</h2>
-                <p><strong>最大速度：</strong>1.5m/s | <strong>续航：</strong>8小时 | <strong>负载：</strong>50kg</p >
-                <h2>🤖 机械臂</h2>
-                <p><strong>自由度：</strong>6轴 | <strong>重复精度：</strong>±0.5cm</p >
-                <h2>📷 视觉传感器</h2>
-                <p><strong>分辨率：</strong>1080P | <strong>AI准确率：</strong>≥92%</p >
-                <h2>💧 喷洒装置</h2>
-                <p><strong>喷幅：</strong>2米 | <strong>流量：</strong>0.1-2L/min 可调</p >
+                <div class="param-grid">
+                    <div class="param-item"><h2>🚜 移动底盘</h2><p>采用四驱麦克纳姆轮，支持全向移动。最大速 1.5m/s，具备 IP65 级防水。</p ></div>
+                    <div class="param-item"><h2>🤖 机械臂</h2><p>定制轻量化 6 轴机械臂，有效负载 2kg，末端重复定位精度达 ±0.5cm。</p ></div>
+                    <div class="param-item"><h2>📷 视觉模组</h2><p>内置深度相机与边缘计算模块，实时识别 20+ 种常见病虫害。</p ></div>
+                    <div class="param-item"><h2>🔋 能源系统</h2><p>50Ah 磷酸铁锂电池，支持快速换电，综合工况续航可达 8-10 小时。</p ></div>
+                </div>
             </div>
         </div>
 
-        <!-- 关于项目页面 -->
+        <!-- 关于项目 -->
         <div id="page-about" class="section">
-            <div class="title-section"><h1>关于项目</h1></div>
-            <div class="content-card">
-                <p><strong>团队名称：</strong>江南科创小队</p >
-                <p><strong>成员：</strong>江南、李明、王芳、张伟</p >
-                <p><strong>开发周期：</strong>2025.10 - 2026.05（8个月）</p >
-                <p style="margin-top:20px;color:#2E7D32;">感谢指导老师与学校支持！</p >
+            <div class="title-section"><h1>关于团队</h1></div>
+            <div class="content-card" style="text-align: center;">
+                <h3 style="color: var(--primary); margin-bottom: 20px;">江南科创小队</h3>
+                <p>我们是来自大一跨专业组成的创新团队，致力于将机器人技术应用于田间地头。</p >
+                <div style="margin: 30px 0; border-top: 1px dashed #ccc; padding-top: 20px;">
+                    <p>指导教师：陈教授</p >
+                    <p>周期：2025.10 - 2026.05</p >
+                </div>
+                <p style="color: var(--accent); font-weight: bold;">🌱 用科技守护每一寸绿意</p >
             </div>
         </div>
     </main>
 
-    <footer style="background:#1B5E20; color:white; text-align:center; padding:28px 20px; margin-top:60px;">
-        <p>智能农业机器人项目展示 © 2026 大一科创团队</p >
+    <footer>
+        <p>智能农业机器人项目展示 © 2026 江南科创小队<br>大一科创优秀作品奖项提名项目</p >
     </footer>
 
-    <script>
-        function showInfo(part) {
-            const info = document.getElementById('info');
-            let content = '';
-            switch(part) {
-                case 1: content = `<h2>🚜 移动底盘</h2><p><strong>功能：</strong>田间自主导航、越障行驶</p ><p><strong>参数：</strong>1.5m/s | 8小时续航</p >`; break;
-                case 2: content = `<h2>🤖 机械臂</h2><p><strong>功能：</strong>精准采摘、除草</p ><p><strong>参数：</strong>6轴自由度</p >`; break;
-                case 3: content = `<h2>📷 视觉传感器</h2><p><strong>功能：</strong>作物健康监测、病虫害识别</p ><p><strong>参数：</strong>AI准确率 ≥92%</p >`; break;
-                case 4: content = `<h2>💧 智能喷洒装置</h2><p><strong>功能：</strong>变量精准喷药</p ><p><strong>参数：</strong>喷幅 2米</p >`; break;
-            }
-            info.innerHTML = content;
+    <audio id="bgm-audio" loop>
+        <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-16.mp3" type="audio/mpeg">
+    </audio>
 
-            // 点击热点时强制激活功能介绍
+    <script>
+        const modules = {
+            1: { title: "🚜 移动底盘", content: "具备全地形越障能力，集成激光雷达实现自主路径规划。<br><b>核心参数：</b>负载50kg | 越障高度15cm" },
+            2: { title: "🤖 机械臂", content: "自适应力控抓取，可根据目标形状自动调整抓取姿态。<br><b>核心参数：</b>6自由度 | 碳纤维材质" },
+            3: { title: "📷 视觉传感器", content: "基于 YOLOv8 的实时物体检测，支持 5G 数据回传监控。<br><b>核心参数：</b>120帧/秒 | 4K高清采集" },
+            4: { title: "💧 智能喷洒", content: "通过视觉反馈实现目标对准喷药，减少 30% 农药浪费。<br><b>核心参数：</b>雾化颗粒可调 | 流量闭环控制" }
+        };
+
+        const audio = document.getElementById('bgm-audio');
+        const bgmBtn = document.getElementById('nav-bgm');
+
+        // 页面导航（仅手动点击导航栏时使用）
+        function navigateTo(pageId) {
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
+                if (item.getAttribute('data-page') === pageId) item.classList.add('active');
             });
-            document.getElementById('nav-feature').classList.add('active');
+
+            document.querySelectorAll('.section').forEach(sec => {
+                sec.classList.remove('active');
+            });
+            const target = document.getElementById(`page-${pageId}`);
+            if (target) target.classList.add('active');
         }
 
-        // 导航栏点击切换
+        // 绑定导航栏点击
         document.querySelectorAll('.nav-item').forEach(item => {
             item.addEventListener('click', () => {
                 const page = item.getAttribute('data-page');
-
-                // 切换页面显示
-                document.querySelectorAll('.section').forEach(section => section.classList.remove('active'));
-                
-                if (page === 'home' || page === 'feature') {
-                    document.getElementById('page-feature').classList.add('active');
-                } else if (page === 'params') {
-                    document.getElementById('page-params').classList.add('active');
-                } else if (page === 'about') {
-                    document.getElementById('page-about').classList.add('active');
-                }
-
-                // 更新激活样式
-                document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
-                item.classList.add('active');
+                navigateTo(page);
             });
         });
 
-        // 页面加载默认功能介绍激活
-        window.onload = () => {
-            document.getElementById('nav-feature').classList.add('active');
-        };
+        // 点击热点：在首页下方显示介绍（不跳转、不改变导航高亮）
+        function showInfo(part) {
+            const infoBox = document.getElementById('info');
+            const data = modules[part];
+            
+            infoBox.style.opacity = '0';
+            setTimeout(() => {
+                infoBox.innerHTML = `
+                    <h2 style="color:var(--primary); margin-bottom:10px;">${data.title}</h2>
+                    <p>${data.content}</p >
+                `;
+                infoBox.style.opacity = '1';
+            }, 200);
+        }
+
+        // 动态生成功能页面内容
+        function renderFeatures() {
+            const container = document.getElementById('feature-grid');
+            container.innerHTML = '';
+            
+            Object.keys(modules).forEach(key => {
+                const mod = modules[key];
+                const div = document.createElement('div');
+                div.className = 'feature-item';
+                div.innerHTML = `
+                    <h2>${mod.title}</h2>
+                    <p>${mod.content}</p >
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        // 音乐控制
+        bgmBtn.addEventListener('click', () => {
+            if (audio.paused) {
+                audio.play();
+                bgmBtn.classList.remove('paused');
+            } else {
+                audio.pause();
+                bgmBtn.classList.add('paused');
+            }
+        });
+
+        // 初始化草地
+        function initGrass() {
+            const container = document.getElementById('grass-container');
+            const count = 60;
+            for (let i = 0; i < count; i++) {
+                const blade = document.createElement('div');
+                blade.className = 'blade';
+                blade.style.left = `${Math.random() * 100}%`;
+                blade.style.height = `${30 + Math.random() * 40}px`;
+                blade.style.animationDelay = `${Math.random() * -4}s`;
+                blade.style.opacity = (0.3 + Math.random() * 0.4).toString();
+                container.appendChild(blade);
+            }
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            initGrass();
+            renderFeatures();
+        });
     </script>
 </body>
 </html>
